@@ -149,8 +149,8 @@
 - `getRawCandidate` : LUNA CSV 데이터에 명시된 환자 좌표계(X,Y,Z)로 표시된 중심 정보와 복셀 단위의 너비 정보(width_irc)도 인자로 전달받아 정육면체의 CT 덩어리와 배열 좌표로 변환된 후보의 중심값을 반환한다.
 - center_irc 데이터 출력 형태 확인하기
 ## 10.5 간단한 데이터셋 구현
-- Ct Class : 다양한 Ct 샘플들
-- LunaDataset Dataset : Ct 샘플들을 정규화하고 각 Ct의 결절은 Flatten작업을 통해 어느 Ct 객체에서 가져온 샘플인지에 상관없이 인출가능하도록 하나의 단일 컬렉션으로 합쳐진다.
+- `Ct` Class : 다양한 Ct 샘플들
+- `LunaDataset Dataset` : Ct 샘플들을 정규화하고 각 Ct의 결절은 Flatten작업을 통해 어느 Ct 객체에서 가져온 샘플인지에 상관없이 인출가능하도록 하나의 단일 컬렉션으로 합쳐진다.
   - 반환값 살펴보기
     - <img width="339" height="118" alt="image" src="https://github.com/user-attachments/assets/8889f289-1825-4b22-9282-f49c062d3049" />
     - <img width="748" height="211" alt="image" src="https://github.com/user-attachments/assets/a10f4fbd-8d86-42da-898b-aaaddefce5e8" />
@@ -179,6 +179,8 @@
 
 ### 10.5.3 훈련/검증 분리
 
+### 분류 모델
+- 이후 모델에 전달될 데이터를 `LunaDataset을` 사용한다.
 
 
 
