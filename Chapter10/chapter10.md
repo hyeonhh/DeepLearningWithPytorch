@@ -1,4 +1,4 @@
-<img width="678" height="170" alt="image" src="https://github.com/user-attachments/assets/d5b42b57-7ade-4031-b805-9f4a97e05baa" /># Chapter 10 여러 데이터 소스를 통합 데이터셋으로 합치기
+# Chapter 10 여러 데이터 소스를 통합 데이터셋으로 합치기
 - 해야할 일
   - 원본 데이터를 읽어들이고 전처리하는 루틴을 만들어야한다.
   - <img width="703" height="414" alt="image" src="https://github.com/user-attachments/assets/d20c43b9-bce2-420b-864b-954e28d613b3" />
