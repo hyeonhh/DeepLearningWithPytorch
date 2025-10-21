@@ -116,5 +116,33 @@ def initTrainDl(self):
   - 각 블럭은 동일한/유사한 세트의 계층을 가지며 블럭과 블럭을 거칠 때마다 필요한 입력 크기나 필터 수가 달라진다.
   - 여기서는 3*3 conv 1개, 하나의 활성화(ReLU), 블록 끝에 max pooling 연산이 이어진 블럭을 사용한다.
 - 헤드
-
+  - 백본의 출력을 받아 원하는 출력 형태로 바꾼다.
+    - 중간 출력물을 평탄화(Flattening)하기도 하고 완전 연결 계층(fully connected layer)에 전달하는 역할을 하기도 한다. 
+    - <img width="622" height="312" alt="image" src="https://github.com/user-attachments/assets/56f91fe5-b8a9-47a9-9c01-06a291ab250e" />
     
+```
+It gets interesting when we use two 3 × 3 × 3 convolutions stacked back to back. Stack-
+ing convolutional layers allows the final output voxel (or pixel) to be influenced by an
+input further away than the size of the convolutional kernel suggests
+```
+
+- 2개의 3*3*3 컨볼루션이 연속으로 쌓이면
+  - 첫 번째 컨볼루션의 출력 복셀 하나도 결국 입력 3*3*3에 대응하고,
+  - 두 번째 컨볼루션도 그 전 단계의 3*3*3 출력을 한번 더 합성곱한다.
+  - 최종 출력의 한 점은 바로 전 레이어의 3*3*3 점에 의존, 실제로는 입력의 5*5*5 영역에 영향을 준다.
+  - 그 각각도 다시 입력의 3*3*3 영역에서 나왔으므로 최종 출력 한 점이 처음 입력에서 참조하는 영역(receptive field)은 더 넓어진다.
+  - <img width="1119" height="319" alt="image" src="https://github.com/user-attachments/assets/2c4e57c5-f1da-4caa-87f5-5c3022ec5afd" />
+
+- 각 3*3*3 컨볼루션은 수용 필드에 대해 모서리당 한 개의 복셀 경계를 더한다.
+  - 2*2 출력은 4*4 수용 필드를 가지고, 다시 6*6 수용 필드를 가진다.
+    - 결과적으로 두 개로 쌓인 3*3*3 계층은 5*5*5 컨볼루션보다 더 적은 파라미터를 가진다.
+  - receptive field = 1 + (커널 크기 -1) * 레이어 수
+    - 두 번 쌓으면 1 + (3-1) * 2 = 5
+  - 파라미터 수 비교
+    - 5*5*5 커널을 한번 쓰면 파라미터 수는 5*5*5 = 125개
+    - 3*3*3 커널을 2개 쓰면 파라미터 수는 3*3*3 * 2 = 54개이다.
+    - 즉 겹겹이 쌓인 작은 커널이 더 넓은 수용 필드를 만들면서도 파라미터는 훨씬 적게 사용한다.
+- 두 개로 쌓인 컨볼루션의 출력은 2*2*2 맥스 풀링으로 들어간다.
+  - 6*6*6 수용 필드로부터 가장 큰 값을 가지는 한개의 5*5*5 필드를 만드는 것이다.
+- 이러한 블럭을 여러 번 반복해서 모델의 백본을 구성한다.
+### 11.4.2 전체 모델
